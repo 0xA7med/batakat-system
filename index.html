@@ -11,7 +11,6 @@
 :root{--bg:#070d1a;--surface:#0f1c2e;--surface2:#162236;--border:#1d3557;--accent:#00c8ff;--accent2:#0051d4;--success:#00e676;--warning:#ffc107;--error:#ff4569;--text:#e2eeff;--muted:#6b87aa;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;}
-
 header{position:sticky;top:0;z-index:50;background:rgba(7,13,26,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
 .logo{display:flex;align-items:center;gap:10px;}
 .logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
@@ -22,17 +21,14 @@ header{position:sticky;top:0;z-index:50;background:rgba(7,13,26,.96);backdrop-fi
 .hdr-stat{text-align:center;}
 .hdr-num{font-size:17px;font-weight:700;color:var(--accent);line-height:1;}
 .hdr-lbl{font-size:9px;color:var(--muted);}
-
 main{padding:16px;max-width:700px;margin:0 auto;}
 section{margin-bottom:20px;}
-
 .upload-zone{border:2px dashed var(--border);border-radius:20px;padding:36px 20px;text-align:center;background:var(--surface);transition:all .25s;cursor:pointer;}
 .upload-zone.drag-over{border-color:var(--accent);background:rgba(0,200,255,.06);}
 .upload-icon{font-size:44px;margin-bottom:10px;}
 .upload-title{font-size:18px;font-weight:700;margin-bottom:6px;}
 .upload-sub{color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.6;}
 .upload-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-
 .btn{padding:11px 20px;border-radius:10px;border:none;font-family:'Cairo',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px;touch-action:manipulation;user-select:none;}
 .btn:active{transform:scale(.97);}
 .btn-blue{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;}
@@ -47,14 +43,12 @@ section{margin-bottom:20px;}
 .btn-new{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;padding:13px 32px;border-radius:12px;}
 .btn-retry-inline{background:rgba(0,200,255,.12);color:var(--accent);border:1px solid rgba(0,200,255,.25);padding:4px 10px;font-size:11px;border-radius:8px;font-family:'Cairo',sans-serif;cursor:pointer;font-weight:600;}
 .btn-retry-inline:hover{background:rgba(0,200,255,.22);}
-
 .preview-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
 .preview-bar-title{font-size:14px;font-weight:700;}
 .preview-bar-actions{display:flex;gap:8px;align-items:center;}
 .count-badge{background:var(--accent);color:var(--bg);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;}
 .preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
 @media(max-width:400px){.preview-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));}}
-
 .pv-item{position:relative;border-radius:12px;overflow:hidden;border:2px solid var(--border);background:var(--surface2);aspect-ratio:1.6;transition:border-color .2s;cursor:pointer;}
 .pv-item:hover{border-color:rgba(0,200,255,.4);}
 .pv-item.s-ok{border-color:var(--success);}
@@ -72,10 +66,8 @@ section{margin-bottom:20px;}
 .pb-dup{background:rgba(255,193,7,.9);color:#000;}
 .pb-partial{background:rgba(0,81,212,.9);color:#fff;}
 .pb-err{background:rgba(255,69,105,.9);color:#fff;}
-/* زر retry صغير على الصورة */
 .pv-retry-btn{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);background:rgba(0,200,255,.9);border:none;color:#000;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;opacity:0;transition:opacity .2s;white-space:nowrap;z-index:2;}
 .pv-item.s-err:hover .pv-retry-btn,.pv-item.s-err:active .pv-retry-btn{opacity:1;}
-
 .progress-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;}
 .prog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .prog-title{font-size:14px;font-weight:700;}
@@ -85,7 +77,6 @@ section{margin-bottom:20px;}
 .prog-bar::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:sh 1.5s infinite;}
 @keyframes sh{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
 .prog-detail{font-size:12px;color:var(--muted);}
-
 .result-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
 .rs-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center;}
 .rs-card.ok{border-color:rgba(0,230,118,.4);}
@@ -99,7 +90,6 @@ section{margin-bottom:20px;}
 .rs-card.dup .rs-num{color:var(--warning);}
 .rs-card.part .rs-num{color:#66aaff;}
 .rs-card.err .rs-num{color:var(--error);}
-
 .table-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px;}
 .table-hdr{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;}
 .table-title{font-size:14px;font-weight:700;}
@@ -114,8 +104,6 @@ tr:hover td{background:rgba(0,200,255,.02);}
 .b-dup{background:rgba(255,193,7,.12);color:var(--warning);}
 .b-part{background:rgba(0,81,212,.15);color:#66aaff;}
 .b-err{background:rgba(255,69,105,.12);color:var(--error);}
-
-/* ===== LIGHTBOX ===== */
 .lb{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .25s;}
 .lb.open{opacity:1;pointer-events:all;}
 .lb-img-wrap{max-width:100%;max-height:65vh;display:flex;align-items:center;justify-content:center;}
@@ -126,12 +114,14 @@ tr:hover td{background:rgba(0,200,255,.02);}
 .lb-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 .lb-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
 .lb-close:hover{background:rgba(255,69,105,.4);}
-
 .notif{position:fixed;bottom:20px;right:50%;transform:translateX(50%) translateY(120px);background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;z-index:300;transition:transform .3s ease;box-shadow:0 16px 48px rgba(0,0,0,.5);max-width:calc(100vw - 32px);text-align:center;}
 .notif.show{transform:translateX(50%) translateY(0);}
 .notif.ok{border-color:var(--success);}
 .notif.err{border-color:var(--error);}
 .notif.warn{border-color:var(--warning);}
+
+/* ── شريط حجم الصورة ── */
+.size-info{font-size:10px;color:var(--muted);text-align:center;margin-top:6px;}
 
 .hidden{display:none !important;}
 #fileIn,#camIn{display:none;}
@@ -160,7 +150,9 @@ tr:hover td{background:rgba(0,200,255,.02);}
     <div class="upload-zone" id="dropZone">
       <div class="upload-icon">📁</div>
       <div class="upload-title">ارفع صور البطاقات</div>
-      <div class="upload-sub">اسحب وأفلت هنا أو اختر من هاتفك</div>
+      <div class="upload-sub">اسحب وأفلت هنا أو اختر من هاتفك<br>
+        <small style="color:var(--accent);font-size:11px">🗜️ الصور بتتضغط تلقائياً قبل الإرسال</small>
+      </div>
       <div class="upload-btns">
         <button class="btn btn-blue" onclick="document.getElementById('fileIn').click()">🖼️ اختر صور</button>
         <button class="btn btn-dark" onclick="document.getElementById('camIn').click()">📷 كاميرا</button>
@@ -243,7 +235,7 @@ tr:hover td{background:rgba(0,200,255,.02);}
 <script>
 const N8N = 'https://n8n.srv855524.hstgr.cloud/webhook/batakat-ocr';
 
-let files = [];   // [{file, id, status, data}]
+let files = [];
 let processing = false;
 
 // ───── Drag & Drop ─────
@@ -273,7 +265,6 @@ function render() {
   const has = files.length > 0;
   tog('secPreview', has); tog('secGo', has);
   document.getElementById('cntBadge').textContent = files.length;
-
   document.getElementById('pvGrid').innerHTML = files.map((f, i) => {
     const url = URL.createObjectURL(f.file);
     const [bcls, btxt, icls] = STATUS_MAP[f.status] || STATUS_MAP.wait;
@@ -316,15 +307,45 @@ async function retrySingle(i, e) {
   show('secResults');
 }
 
+// ══════════════════════════════════════════
+//  تصغير الصورة قبل الإرسال
+//  maxPx  = أقصى عرض أو ارتفاع (بكسل)
+//  quality = جودة JPEG (0 → 1)
+// ══════════════════════════════════════════
+function compressImage(file, maxPx = 1200, quality = 0.82) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let w = img.width, h = img.height;
+      // تصغير لو أكبر من maxPx
+      if (w > maxPx || h > maxPx) {
+        if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else       { w = Math.round(w * maxPx / h); h = maxPx; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      canvas.toBlob(blob => resolve(blob), 'image/jpeg', quality);
+    };
+    img.src = url;
+  });
+}
+
 // ───── Core: process one file ─────
 async function processFile(i) {
   const f = files[i];
   f.status = 'proc';
   render();
   try {
-    const b64  = await toB64(f.file);
-    const mime = f.file.type || 'image/jpeg';
-    const res  = await fetch(N8N, {
+    // ① ضغط الصورة أولاً
+    const compressed = await compressImage(f.file);
+    // ② تحويل لـ base64
+    const b64  = await blobToB64(compressed);
+    const mime = 'image/jpeg'; // دايماً jpeg بعد الضغط
+
+    const res = await fetch(N8N, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image: b64, mimeType: mime, fileName: f.file.name })
@@ -423,12 +444,12 @@ function renderTable() {
 }
 
 // ───── Helpers ─────
-function toB64(file) {
+function blobToB64(blob) {
   return new Promise((res, rej) => {
     const r = new FileReader();
     r.onload = e => res(e.target.result.split(',')[1]);
     r.onerror = rej;
-    r.readAsDataURL(file);
+    r.readAsDataURL(blob);
   });
 }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
