@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>نظام البطاقات</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
+:root {
+  --bg: #070d1a;
+  --surface: #0f1c2e;
+  --surface2: #162236;
+  --border: #1d3557;
+  --accent: #00c8ff;
+  --accent2: #0051d4;
+  --success: #00e676;
+  --warning: #ffc107;
+  --error: #ff4569;
+  --text: #e2eeff;
+  --muted: #6b87aa;
+  --radius: 14px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  font-family:'Cairo',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  min-height:100dvh;
+  overflow-x:hidden;
+}
+
+/* ===== HEADER ===== */
+header {
+  position:sticky; top:0; z-index:50;
+  background:rgba(7,13,26,.95);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:12px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+
+.logo { display:flex; align-items:center; gap:10px; }
+.logo-icon {
+  width:38px; height:38px;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0;
+}
+.logo-text { font-size:16px; font-weight:700; line-height:1.2; }
+.logo-text span { color:var(--accent); }
+.logo-sub { font-size:10px; color:var(--muted); }
+
+.hdr-stats { display:flex; gap:14px; }
+.hdr-stat { text-align:center; }
+.hdr-num { font-size:17px; font-weight:700; color:var(--accent); line-height:1; }
+.hdr-lbl { font-size:9px; color:var(--muted); margin-top:1px; }
+
+/* ===== MAIN ===== */
+main { padding:16px; max-width:700px; margin:0 auto; }
+
+section { margin-bottom:20px; }
+
+/* ===== UPLOAD ZONE ===== */
+.upload-zone {
+  border:2px dashed var(--border);
+  border-radius:20px;
+  padding:36px 20px;
+  text-align:center;
+  background:var(--surface);
+  transition:all .25s;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+}
+.upload-zone.drag-over {
+  border-color:var(--accent);
+  background:rgba(0,200,255,.06);
+}
+.upload-icon { font-size:44px; margin-bottom:10px; }
+.upload-title { font-size:18px; font-weight:700; margin-bottom:6px; }
+.upload-sub { color:var(--muted); font-size:13px; margin-bottom:20px; line-height:1.6; }
+.upload-btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  padding:11px 20px;
+  border-radius:10px; border:none;
+  font-family:'Cairo',sans-serif; font-size:14px; font-weight:600;
+  cursor:pointer; transition:all .2s;
+  display:inline-flex; align-items:center; gap:7px;
+  touch-action:manipulation;
+  -webkit-user-select:none; user-select:none;
+}
+.btn:active { transform:scale(.97); }
+
+.btn-primary { background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; }
+.btn-primary:hover { box-shadow:0 6px 20px rgba(0,100,255,.35); }
+
+.btn-cam { background:var(--surface2); color:var(--text); border:1px solid var(--border); }
+.btn-cam:hover { border-color:var(--accent); color:var(--accent); }
+
+.btn-go {
+  background:linear-gradient(135deg,#008f40,var(--success));
+  color:#fff; font-size:16px; font-weight:700;
+  padding:15px 40px; width:100%; justify-content:center;
+  border-radius:14px;
+}
+.btn-go:hover { box-shadow:0 8px 24px rgba(0,230,118,.3); }
+.btn-go:disabled { opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+.btn-sm { padding:6px 12px; font-size:12px; }
+.btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); }
+.btn-ghost:hover { border-color:var(--error); color:var(--error); }
+.btn-new { background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#fff; padding:13px 32px; border-radius:12px; }
+
+/* ===== PREVIEW ===== */
+.preview-bar {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px; flex-wrap:wrap; gap:8px;
+}
+.preview-bar-title { font-size:14px; font-weight:700; }
+.preview-bar-actions { display:flex; gap:8px; align-items:center; }
+.count-badge {
+  background:var(--accent); color:var(--bg);
+  padding:3px 10px; border-radius:20px;
+  font-size:12px; font-weight:700;
+}
+
+.preview-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+  gap:10px;
+}
+
+@media(max-width:400px) {
+  .preview-grid { grid-template-columns:repeat(auto-fill, minmax(110px,1fr)); }
+}
+
+.pv-item {
+  position:relative; border-radius:12px; overflow:hidden;
+  border:2px solid var(--border);
+  background:var(--surface2);
+  aspect-ratio:1.6;
+  transition:border-color .2s;
+}
+.pv-item.done-ok { border-color:var(--success); }
+.pv-item.done-dup { border-color:var(--warning); }
+.pv-item.done-partial { border-color:var(--accent2); }
+.pv-item.done-err { border-color:var(--error); }
+
+.pv-item img { width:100%; height:100%; object-fit:cover; display:block; }
+
+.pv-del {
+  position:absolute; top:5px; left:5px;
+  background:rgba(255,69,105,.85); border:none; color:#fff;
+  width:22px; height:22px; border-radius:50%;
+  font-size:12px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .2s;
+}
+.pv-item:hover .pv-del, .pv-item:active .pv-del { opacity:1; }
+
+.pv-name {
+  position:absolute; bottom:0; left:0; right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,.75));
+  padding:12px 6px 4px;
+  font-size:10px; color:#fff;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+.pv-badge {
+  position:absolute; top:5px; right:5px;
+  padding:2px 7px; border-radius:20px;
+  font-size:9px; font-weight:700;
+}
+.pb-wait { background:rgba(255,193,7,.9); color:#000; }
+.pb-proc { background:rgba(0,200,255,.9); color:#000; }
+.pb-ok { background:rgba(0,230,118,.9); color:#000; }
+.pb-dup { background:rgba(255,193,7,.9); color:#000; }
+.pb-part { background:rgba(0,81,212,.9); color:#fff; }
+.pb-err { background:rgba(255,69,105,.9); color:#fff; }
+
+/* ===== PROGRESS ===== */
+.progress-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); padding:20px;
+}
+.prog-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.prog-title { font-size:14px; font-weight:700; }
+.prog-pct { font-size:20px; font-weight:900; color:var(--accent); }
+.prog-wrap { background:var(--surface2); border-radius:8px; height:10px; overflow:hidden; margin-bottom:10px; }
+.prog-bar {
+  height:100%; width:0%;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  border-radius:8px; transition:width .4s ease;
+  position:relative; overflow:hidden;
+}
+.prog-bar::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+  animation:sh 1.5s infinite;
+}
+@keyframes sh { 0%{transform:translateX(-100%)} 100%{transform:translateX(200%)} }
+.prog-detail { font-size:12px; color:var(--muted); }
+
+/* ===== RESULT STATS ===== */
+.result-stats {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px;
+  margin-bottom:16px;
+}
+.rs-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:14px 10px; text-align:center;
+}
+.rs-card.ok { border-color:rgba(0,230,118,.4); }
+.rs-card.dup { border-color:rgba(255,193,7,.4); }
+.rs-card.part { border-color:rgba(0,81,212,.4); }
+.rs-card.err { border-color:rgba(255,69,105,.4); }
+.rs-icon { font-size:20px; margin-bottom:4px; }
+.rs-num { font-size:22px; font-weight:900; }
+.rs-lbl { font-size:10px; color:var(--muted); }
+.rs-card.ok .rs-num { color:var(--success); }
+.rs-card.dup .rs-num { color:var(--warning); }
+.rs-card.part .rs-num { color:#66aaff; }
+.rs-card.err .rs-num { color:var(--error); }
+
+/* ===== RESULTS TABLE ===== */
+.table-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); overflow:hidden; margin-bottom:16px;
+}
+.table-hdr {
+  padding:14px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  flex-wrap:wrap; gap:8px;
+}
+.table-title { font-size:14px; font-weight:700; }
+.export-btns { display:flex; gap:8px; }
+
+.tbl-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+table { width:100%; border-collapse:collapse; min-width:500px; }
+th {
+  padding:10px 12px; text-align:right;
+  font-size:11px; color:var(--muted); font-weight:600;
+  background:var(--surface2); border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+td {
+  padding:11px 12px; font-size:12px;
+  border-bottom:1px solid rgba(29,53,87,.5);
+  vertical-align:middle;
+}
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(0,200,255,.03); }
+
+.badge {
+  display:inline-flex; align-items:center; gap:3px;
+  padding:3px 8px; border-radius:20px; font-size:11px; font-weight:600;
+  white-space:nowrap;
+}
+.b-ok { background:rgba(0,230,118,.12); color:var(--success); }
+.b-dup { background:rgba(255,193,7,.12); color:var(--warning); }
+.b-part { background:rgba(0,81,212,.15); color:#66aaff; }
+.b-err { background:rgba(255,69,105,.12); color:var(--error); }
+
+/* ===== NOTIFICATION ===== */
+.notif {
+  position:fixed; bottom:24px; right:50%; transform:translateX(50%) translateY(100px);
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:12px; padding:12px 20px;
+  font-size:13px; font-weight:600;
+  z-index:999; transition:transform .3s ease;
+  box-shadow:0 16px 48px rgba(0,0,0,.5);
+  max-width:calc(100vw - 32px); text-align:center;
+}
+.notif.show { transform:translateX(50%) translateY(0); }
+.notif.ok { border-color:var(--success); }
+.notif.err { border-color:var(--error); }
+.notif.warn { border-color:var(--warning); }
+
+/* ===== HIDDEN ===== */
+.hidden { display:none !important; }
+#fileIn,#camIn { display:none; }
+
+/* ===== EMPTY ===== */
+.empty-row td { text-align:center; color:var(--muted); padding:32px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🪪</div>
+    <div>
+      <div class="logo-text">نظام <span>البطاقات</span></div>
+      <div class="logo-sub">معالجة بطاقات الرقم القومي</div>
+    </div>
+  </div>
+  <div class="hdr-stats">
+    <div class="hdr-stat"><div class="hdr-num" id="h0">0</div><div class="hdr-lbl">إجمالي</div></div>
+    <div class="hdr-stat"><div class="hdr-num" style="color:var(--success)" id="h1">0</div><div class="hdr-lbl">تمت</div></div>
+    <div class="hdr-stat"><div class="hdr-num" style="color:var(--warning)" id="h2">0</div><div class="hdr-lbl">مكرر</div></div>
+    <div class="hdr-stat"><div class="hdr-num" style="color:var(--error)" id="h3">0</div><div class="hdr-lbl">فشل</div></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- UPLOAD -->
+  <section id="secUpload">
+    <div class="upload-zone" id="dropZone">
+      <div class="upload-icon">📁</div>
+      <div class="upload-title">ارفع صور البطاقات</div>
+      <div class="upload-sub">اسحب وأفلت هنا<br>أو اختر من هاتفك</div>
+      <div class="upload-btns">
+        <button class="btn btn-primary" onclick="document.getElementById('fileIn').click()">
+          🖼️ اختر صور
+        </button>
+        <button class="btn btn-cam" onclick="document.getElementById('camIn').click()">
+          📷 كاميرا
+        </button>
+      </div>
+    </div>
+    <input type="file" id="fileIn" multiple accept="image/*" onchange="addFiles(this.files); this.value=''">
+    <input type="file" id="camIn" accept="image/*" capture="environment" onchange="addFiles(this.files); this.value=''">
+  </section>
+
+  <!-- PREVIEW -->
+  <section id="secPreview" class="hidden">
+    <div class="preview-bar">
+      <div class="preview-bar-title">📸 الصور المختارة</div>
+      <div class="preview-bar-actions">
+        <span class="count-badge" id="cntBadge">0</span>
+        <button class="btn btn-cam btn-sm" onclick="document.getElementById('fileIn').click()">➕ إضافة</button>
+        <button class="btn btn-ghost btn-sm" onclick="clearAll()">🗑️</button>
+      </div>
+    </div>
+    <div class="preview-grid" id="pvGrid"></div>
+  </section>
+
+  <!-- GO BUTTON -->
+  <section id="secGo" class="hidden">
+    <button class="btn btn-go" id="goBtn" onclick="startProcessing()">
+      🚀 بدء المعالجة
+    </button>
+  </section>
+
+  <!-- PROGRESS -->
+  <section id="secProg" class="hidden">
+    <div class="progress-card">
+      <div class="prog-header">
+        <div class="prog-title">⚡ جاري المعالجة...</div>
+        <div class="prog-pct" id="pct">0%</div>
+      </div>
+      <div class="prog-wrap"><div class="prog-bar" id="pBar"></div></div>
+      <div class="prog-detail" id="pDetail">جاري التهيئة...</div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="secResults" class="hidden">
+    <div class="result-stats">
+      <div class="rs-card ok"><div class="rs-icon">✅</div><div class="rs-num" id="r0">0</div><div class="rs-lbl">تمت</div></div>
+      <div class="rs-card dup"><div class="rs-icon">🔁</div><div class="rs-num" id="r1">0</div><div class="rs-lbl">مكرر</div></div>
+      <div class="rs-card part"><div class="rs-icon">⚠️</div><div class="rs-num" id="r2">0</div><div class="rs-lbl">جزئي</div></div>
+      <div class="rs-card err"><div class="rs-icon">❌</div><div class="rs-num" id="r3">0</div><div class="rs-lbl">فشل</div></div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-hdr">
+        <div class="table-title">📊 تفاصيل النتائج</div>
+        <div class="export-btns">
+          <button class="btn btn-cam btn-sm" onclick="expCSV()">📥 CSV</button>
+          <button class="btn btn-cam btn-sm" onclick="expXLS()">📊 Excel</button>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>الاسم</th><th>الرقم القومي</th>
+              <th>الهاتف</th><th>أفراد الأسرة</th><th>الحالة</th>
+            </tr>
+          </thead>
+          <tbody id="tBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="text-align:center">
+      <button class="btn btn-new" onclick="resetAll()">🔄 دفعة جديدة</button>
+    </div>
+  </section>
+
+</main>
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ===== CONFIG =====
+// غيّر ده بـ URL الـ n8n webhook الخاص بيك
+const N8N_URL = 'https://n8n.srv855524.hstgr.cloud/webhook/batakat-ocr';
+
+// ===== STATE =====
+let files = [];
+let results = [];
+let stats = { total:0, ok:0, dup:0, partial:0, fail:0 };
+
+// ===== DRAG & DROP =====
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag-over'); addFiles(e.dataTransfer.files); });
+
+// ===== FILES =====
+function addFiles(newFiles) {
+  for (const f of newFiles) {
+    if (f.type.startsWith('image/')) {
+      files.push({ file: f, id: Date.now() + Math.random(), status: 'wait' });
+    }
+  }
+  render();
+}
+
+function removeFile(idx) { files.splice(idx, 1); render(); }
+
+function clearAll() { files = []; render(); }
+
+function render() {
+  const hasFils = files.length > 0;
+  document.getElementById('secPreview').classList.toggle('hidden', !hasFils);
+  document.getElementById('secGo').classList.toggle('hidden', !hasFils);
+  document.getElementById('cntBadge').textContent = files.length;
+
+  const pMap = {
+    wait: ['pb-wait','انتظار',''],
+    proc: ['pb-proc','جاري...',''],
+    success: ['pb-ok','✓ تمت','done-ok'],
+    partial: ['pb-part','جزئي','done-partial'],
+    duplicate: ['pb-dup','مكرر','done-dup'],
+    error: ['pb-err','فشل','done-err'],
+  };
+
+  document.getElementById('pvGrid').innerHTML = files.map((f, i) => {
+    const url = URL.createObjectURL(f.file);
+    const [bcls, btxt, icls] = pMap[f.status] || pMap.wait;
+    return `<div class="pv-item ${icls}">
+      <img src="${url}" loading="lazy">
+      <button class="pv-del" onclick="removeFile(${i})">✕</button>
+      <div class="pv-name">${f.file.name}</div>
+      <div class="pv-badge ${bcls}">${btxt}</div>
+    </div>`;
+  }).join('');
+}
+
+// ===== PROCESSING =====
+async function startProcessing() {
+  if (!files.length) return;
+
+  stats = { total: files.length, ok:0, dup:0, partial:0, fail:0 };
+  results = [];
+
+  document.getElementById('goBtn').disabled = true;
+  show('secProg');
+  hide('secResults');
+  updHdr();
+
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
+    f.status = 'proc';
+    render();
+    setProgress(i, files.length, `(${i+1} / ${files.length}) ${f.file.name}`);
+
+    try {
+      const b64 = await toB64(f.file);
+      const mime = f.file.type || 'image/jpeg';
+
+      const res = await fetch(N8N_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: b64, mimeType: mime, fileName: f.file.name })
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      f.status = data.status || 'error';
+      results.push({
+        name: data.name || '—',
+        nid: data.national_id || '—',
+        phone: data.phone || '—',
+        fam: data.family_count ?? '—',
+        status: data.status || 'error',
+        notes: data.message || (data.unclear_fields?.length ? 'غير واضح: ' + data.unclear_fields.join('، ') : ''),
+        file: f.file.name
+      });
+
+      if (data.status === 'success') stats.ok++;
+      else if (data.status === 'duplicate') stats.dup++;
+      else if (data.status === 'partial') { stats.ok++; stats.partial++; }
+      else stats.fail++;
+
+    } catch(e) {
+      f.status = 'error';
+      results.push({ name:'—', nid:'—', phone:'—', fam:'—', status:'error', notes: e.message, file: f.file.name });
+      stats.fail++;
+    }
+
+    updHdr();
+    render();
+    if (i < files.length - 1) await sleep(400);
+  }
+
+  setProgress(files.length, files.length, '✅ اكتملت المعالجة!');
+  showResults();
+  document.getElementById('goBtn').disabled = false;
+  notify(`✅ ${stats.ok} تمت  |  🔁 ${stats.dup} مكرر  |  ❌ ${stats.fail} فشل`, 'ok');
+}
+
+// ===== HELPERS =====
+function toB64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function setProgress(done, total, detail) {
+  const p = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('pBar').style.width = p + '%';
+  document.getElementById('pct').textContent = p + '%';
+  document.getElementById('pDetail').textContent = detail;
+}
+
+function updHdr() {
+  document.getElementById('h0').textContent = stats.total;
+  document.getElementById('h1').textContent = stats.ok;
+  document.getElementById('h2').textContent = stats.dup;
+  document.getElementById('h3').textContent = stats.fail;
+}
+
+function showResults() {
+  document.getElementById('r0').textContent = stats.ok;
+  document.getElementById('r1').textContent = stats.dup;
+  document.getElementById('r2').textContent = stats.partial;
+  document.getElementById('r3').textContent = stats.fail;
+
+  const bMap = {
+    success: '<span class="badge b-ok">✅ تمت</span>',
+    partial:  '<span class="badge b-part">⚠️ جزئي</span>',
+    duplicate:'<span class="badge b-dup">🔁 مكرر</span>',
+    error:    '<span class="badge b-err">❌ فشل</span>',
+  };
+
+  const rows = results.map((r, i) => `
+    <tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td>${r.name}</td>
+      <td style="font-family:monospace;font-size:11px;letter-spacing:.5px">${r.nid}</td>
+      <td>${r.phone}</td>
+      <td style="text-align:center">${r.fam}</td>
+      <td>${bMap[r.status] || bMap.error}</td>
+    </tr>`).join('');
+
+  document.getElementById('tBody').innerHTML = rows || `<tr class="empty-row"><td colspan="6">لا توجد نتائج</td></tr>`;
+  show('secResults');
+}
+
+function show(id) { document.getElementById(id).classList.remove('hidden'); }
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+
+function notify(msg, type='ok') {
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.className = `notif show ${type}`;
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// ===== EXPORT =====
+function expCSV() {
+  const h = ['#','الاسم','الرقم القومي','الهاتف','أفراد الأسرة','الحالة','ملاحظات'];
+  const rows = results.map((r,i) => [i+1, r.name, r.nid, r.phone, r.fam, r.status, r.notes]);
+  const csv = [h,...rows].map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  dl('\ufeff' + csv, 'تقرير_البطاقات.csv', 'text/csv;charset=utf-8');
+}
+
+function expXLS() {
+  const rows = results.map((r,i) => `<tr><td>${i+1}</td><td>${r.name}</td><td>${r.nid}</td><td>${r.phone}</td><td>${r.fam}</td><td>${r.status}</td><td>${r.notes}</td></tr>`).join('');
+  const html = `<table><tr><th>#</th><th>الاسم</th><th>الرقم القومي</th><th>الهاتف</th><th>أفراد الأسرة</th><th>الحالة</th><th>ملاحظات</th></tr>${rows}</table>`;
+  dl('\ufeff' + html, 'تقرير_البطاقات.xls', 'application/vnd.ms-excel;charset=utf-8');
+}
+
+function dl(content, name, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], { type }));
+  a.download = name;
+  a.click();
+}
+
+function resetAll() {
+  files = []; results = [];
+  stats = { total:0, ok:0, dup:0, partial:0, fail:0 };
+  ['secPreview','secGo','secProg','secResults'].forEach(hide);
+  show('secUpload');
+  document.getElementById('goBtn').disabled = false;
+  document.getElementById('pBar').style.width = '0%';
+  updHdr();
+  document.getElementById('h0').textContent='0';
+  document.getElementById('h1').textContent='0';
+  document.getElementById('h2').textContent='0';
+  document.getElementById('h3').textContent='0';
+}
+</script>
+</body>
+</html>
