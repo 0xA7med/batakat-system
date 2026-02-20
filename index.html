@@ -506,8 +506,8 @@ async function startProcessing() {
       });
 
       if (data.status === 'success') stats.ok++;
-      else if (data.status === 'duplicate') stats.dup++;
       else if (data.status === 'partial') { stats.ok++; stats.partial++; }
+      else if (data.status === 'duplicate') stats.dup++;
       else stats.fail++;
 
     } catch(e) {
@@ -560,10 +560,10 @@ function showResults() {
   document.getElementById('r3').textContent = stats.fail;
 
   const bMap = {
-    success: '<span class="badge b-ok">✅ تمت</span>',
-    partial:  '<span class="badge b-part">⚠️ جزئي</span>',
-    duplicate:'<span class="badge b-dup">🔁 مكرر</span>',
-    error:    '<span class="badge b-err">❌ فشل</span>',
+    success:   '<span class="badge b-ok">✅ تمت</span>',
+    partial:   '<span class="badge b-part">⚠️ جزئي</span>',
+    duplicate: '<span class="badge b-dup">🔁 مكرر</span>',
+    error:     '<span class="badge b-err">❌ فشل</span>',
   };
 
   const rows = results.map((r, i) => `
